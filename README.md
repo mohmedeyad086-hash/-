@@ -151,3 +151,13 @@
     </script>
 </body>
 </html>
+<!-- المربع الرمادي المنقط وبداخله صورتك للتجربة -->
+<div class="photo-container">
+    <!-- وضعنا اسم صورتك هنا في الـ src وقمنا بإظهارها للتجربة -->
+    <img id="preview-img" src="father_and_son.jpg" alt="صورتك مع بابا" style="display: block; width: 100%; height: 100%; object-fit: cover;">
+    
+    <!-- تم إخفاء النص الافتراضي لأن الصورة معروضة الآن -->
+    <div id="placeholder-text" style="display: none;">
+        📸 مكان صورتك مع بابا
+    </div>
+</div>
