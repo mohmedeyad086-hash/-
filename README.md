@@ -1,163 +1,95 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>هدية لبابا الغالي</title>
+    <title>لعبة كرة قدم - شخصين</title>
     <style>
-        @import url('https://googleapis.com');
-        
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 500px;
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-            text-align: center;
-            padding: 30px 20px;
-            border-top: 8px solid #2c3e50;
-        }
-
-        .envelope-btn {
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
-            transition: transform 0.2s, background-color 0.2s;
-        }
-
-        .envelope-btn:hover {
-            transform: scale(1.05);
-            background-color: #34495e;
-        }
-
-        .gift-content {
-            display: none;
-            animation: fadeIn 1.5s ease-in-out forwards;
-        }
-
-        .heart {
-            color: #e74c3c;
-            font-size: 50px;
-            animation: pulse 1.5s infinite;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            color: #2c3e50;
-            font-size: 26px;
-            margin-bottom: 20px;
-        }
-
-        .message {
-            font-size: 18px;
-            line-height: 1.8;
-            color: #555;
-            text-align: right;
-            background: #f9fbfb;
-            padding: 20px;
-            border-right: 4px solid #3498db;
-            border-radius: 8px;
-            margin-bottom: 25px;
-        }
-
-        .photo-placeholder {
-            width: 100%;
-            height: 250px;
-            background-color: #eaeded;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #7f8c8d;
-            font-size: 16px;
-            margin-bottom: 20px;
-            border: 2px dashed #bdc3c7;
-            background-image: url('dad.jpg'); /* استبدل dad.jpg باسم صورتك لاحقاً */
-            background-size: cover;
-            background-position: center;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        body { margin: 0; background-color: #222; display: flex; justify-content: center; align-items: center; height: 100vh; color: white; font-family: Arial, sans-serif; overflow: hidden; }
+        canvas { border: 4px solid white; background-color: #2e7d32; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <!-- واجهة المفاجأة الأولى -->
-        <div id="welcome-screen">
-            <div class="heart">🎁</div>
-            <h1>إلى بابا الغالي.. أحلى وأعظم أب في الدنيا</h1>
-            <p style="color: #7f8c8d; margin-bottom: 30px;">اضغط على الزر أدناه لرؤية مفاجأتك</p>
-            <button class="envelope-btn" onclick="openGift()">افتح الهدية 🤍</button>
-        </div>
-
-        <!-- محتوى الهدية الذي سيظهر بعد الضغط -->
-        <div id="gift-screen" class="gift-content">
-            <div class="heart">❤️</div>
-            <h1>كل عام وأنت سندنا وفخرنا</h1>
-            
-            <!-- مكان الصورة العائلية -->
-            <div class="photo-placeholder">
-                <!-- إذا لم تضف صورة سيظهر هذا النص، وإذا أضفت صورة سيغطي عليها -->
-                <span>مكان صورتك مع بابا 📸</span>
-            </div>
-
-            <!-- الرسالة المؤثرة -->
-            <div class="message">
-                بابا الحبيب، <br>
-                أردت أن أقدم لك هذه الهدية البسيطة لأعبر لك عن مدى حبي وامتناني لكل ما تفعله من أجلنا. <br>
-                شكراً لأنك السند الدافئ، وشكراً لكل تضحية قدمتها لتجعلنا سعداء. <br>
-                أدعو الله أن يحفظك لنا، ويمدك بالصحة والعافية، ويحفظ ضحكتك التي تنير حياتنا. <br><br>
-                من ابنك/ابنتك المحبة دائماً..
-            </div>
-            
-            <p style="color: #2c3e50; font-weight: bold;">أحبك يا بابا! 🥰</p>
-        </div>
-    </div>
-
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
     <script>
-        function openGift() {
-            document.getElementById('welcome-screen').style.display = 'none';
-            document.getElementById('gift-screen').style.display = 'block';
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let player1 = { x: 100, y: 200, radius: 20, color: "red", score: 0 };
+        let player2 = { x: 700, y: 200, radius: 20, color: "blue", score: 0 };
+        let ball = { x: 400, y: 200, radius: 12, color: "white", vx: 0, vy: 0 };
+        let keys = {};
+
+        window.addEventListener("keydown", (e) => keys[e.key] = true);
+        window.addEventListener("keyup", (e) => keys[e.key] = false);
+
+        function movePlayers() {
+            if (keys["w"] || keys["W"]) player1.y -= 5;
+            if (keys["s"] || keys["S"]) player1.y += 5;
+            if (keys["a"] || keys["A"]) player1.x -= 5;
+            if (keys["d"] || keys["D"]) player1.x += 5;
+
+            if (keys["ArrowUp"]) player2.y -= 5;
+            if (keys["ArrowDown"]) player2.y += 5;
+            if (keys["ArrowLeft"]) player2.x -= 5;
+            if (keys["ArrowRight"]) player2.x += 5;
+
+            keepInBounds(player1);
+            keepInBounds(player2);
         }
+
+        function keepInBounds(player) {
+            if (player.x - player.radius < 0) player.x = player.radius;
+            if (player.x + player.radius > canvas.width) player.x = canvas.width - player.radius;
+            if (player.y - player.radius < 0) player.y = player.radius;
+            if (player.y + player.radius > canvas.height) player.y = canvas.height - player.radius;
+        }
+
+        function updateBall() {
+            ball.x += ball.vx; ball.y += ball.vy;
+            ball.vx *= 0.98; ball.vy *= 0.98;
+
+            if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) ball.vy = -ball.vy;
+
+            if (ball.x < 0) {
+                if (ball.y > 150 && ball.y < 250) { player2.score++; resetBall(); } 
+                else { ball.vx = -ball.vx; ball.x = ball.radius; }
+            }
+            if (ball.x > canvas.width) {
+                if (ball.y > 150 && ball.y < 250) { player1.score++; resetBall(); } 
+                else { ball.vx = -ball.vx; ball.x = canvas.width - ball.radius; }
+            }
+            checkCollision(player1); checkCollision(player2);
+        }
+
+        function checkCollision(player) {
+            let dx = ball.x - player.x, dy = ball.y - player.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < player.radius + ball.radius) {
+                let angle = Math.atan2(dy, dx);
+                ball.vx = Math.cos(angle) * 7; ball.vy = Math.sin(angle) * 7;
+            }
+        }
+
+        function resetBall() { ball.x = canvas.width / 2; ball.y = canvas.height / 2; ball.vx = 0; ball.vy = 0; }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = "rgba(255,255,255,0.6)"; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(canvas.width / 2, 0); ctx.lineTo(canvas.width / 2, canvas.height); ctx.stroke();
+            ctx.beginPath(); ctx.arc(canvas.width / 2, canvas.height / 2, 60, 0, Math.PI * 2); ctx.stroke();
+            ctx.fillStyle = "white"; ctx.fillRect(0, 150, 8, 100); ctx.fillRect(canvas.width - 8, 150, 8, 100);
+
+            ctx.fillStyle = player1.color; ctx.beginPath(); ctx.arc(player1.x, player1.y, player1.radius, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = player2.color; ctx.beginPath(); ctx.arc(player2.x, player2.y, player2.radius, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = ball.color; ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2); ctx.fill();
+
+            ctx.font = "bold 32px Arial"; ctx.fillStyle = "white";
+            ctx.fillText(player1.score, canvas.width / 2 - 60, 45); ctx.fillText(player2.score, canvas.width / 2 + 35, 45);
+        }
+
+        function gameLoop() { movePlayers(); updateBall(); draw(); requestAnimationFrame(gameLoop); }
+        gameLoop();
     </script>
 </body>
 </html>
-<!-- المربع الرمادي المنقط وبداخله صورتك للتجربة -->
-<div class="photo-container">
-    <!-- وضعنا اسم صورتك هنا في الـ src وقمنا بإظهارها للتجربة -->
-    <img id="preview-img" src="father_and_son.jpg" alt="صورتك مع بابا" style="display: block; width: 100%; height: 100%; object-fit: cover;">
-    
-    <!-- تم إخفاء النص الافتراضي لأن الصورة معروضة الآن -->
-    <div id="placeholder-text" style="display: none;">
-        📸 مكان صورتك مع بابا
-    </div>
-</div>
