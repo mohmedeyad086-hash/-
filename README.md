@@ -3,189 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة كرة قدم واقعية</title>
+    <title>كريستيانو رونالدو | CR7 Legend</title>
     <style>
-        body {
+        :root {
+            --primary-color: #7a1212; /* لون النصر والبرتغال */
+            --accent-color: #e6b800; /* اللون الذهبي للجوائز */
+            --bg-dark: #111111;
+            --bg-light: #1e1e1e;
+            --text-color: #ffffff;
+        }
+
+        * {
             margin: 0;
-            background-color: #222;
-            color: white;
-            font-family: Arial, sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://unsplash.com') no-repeat center center/cover;
+            height: 60vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            height: 100vh;
-            overflow: hidden;
+            align-items: center;
+            text-align: center;
+            border-bottom: 4px solid var(--accent-color);
         }
-        #scoreboard {
-            font-size: 24px;
+
+        header h1 {
+            font-size: 3.5rem;
+            color: var(--text-color);
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
             margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.5rem;
+            color: var(--accent-color);
             font-weight: bold;
         }
-        canvas {
-            background-color: #387344;
-            border: 5px solid white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+
+        nav {
+            background-color: var(--bg-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            padding: 15px;
         }
-        .controls {
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            margin-bottom: 60px;
+            scroll-margin-top: 80px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            border-right: 5px solid var(--primary-color);
+            padding-right: 15px;
+            margin-bottom: 30px;
+            color: var(--accent-color);
+        }
+
+        /* قسم الإحصائيات */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #333;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        /* قسم الأهداف والفيديوهات */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .video-card {
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .video-info {
+            padding: 15px;
+        }
+
+        .video-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        /* السيرة الذاتية */
+        .info-box {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .info-box ul {
+            list-style: none;
             margin-top: 15px;
-            font-size: 14px;
-            color: #aaa;
+        }
+
+        .info-box li {
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .info-box strong {
+            color: var(--accent-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background-color: var(--bg-light);
+            color: #888;
+            border-top: 1px solid #333;
         }
     </style>
 </head>
 <body>
 
-    <div id="scoreboard">اللاعب 1: <span id="p1Score">0</span> | اللاعب 2: <span id="p2Score">0</span></div>
-    <canvas id="gameCanvas" width="800" height="400"></canvas>
-    
-    <div class="controls">
-        **التحكم:** اللاعب 1 (الأزرق): W, A, S, D | اللاعب 2 (الأحمر): الأسهم الإتجاهية
+    <header>
+        <h1>كريستيانو رونالدو</h1>
+        <p>CR7 - الهداف التاريخي لكرة القدم</p>
+    </header>
+
+    <nav>
+        <a href="#about">السيرة الذاتية</a>
+        <a href="#stats">إحصائيات التاريخية</a>
+        <a href="#goals">فيديوهات الأهداف</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- قسم السيرة الذاتية -->
+        <section id="about">
+            <h2>من هو الدون؟</h2>
+            <div class="info-box">
+                <p>كريستيانو رونالدو دوس سانتوس أفيرو، يعتبره الكثيرون أفضل لاعب في تاريخ كرة القدم. تميز عبر مسيرته الطويلة بالسرعة، القوة البدنية، والقدرة التهديفية الخارقة مع مختلف الأندية العالمية والمنتخب البرتغالي.</p>
+                <ul>
+                    <li><strong>تاريخ الميلاد:</strong> 5 فبراير 1985 (العمر حالياً 41 عاماً)</li>
+                    <li><strong>النادي الحالي:</strong> نادي النصر السعودي</li>
+                    <li><strong>المركز:</strong> مهاجم / جناح</li>
+                    <li><strong>رقم القميص:</strong> 7</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- قسم الإحصائيات المحدثة لعام 2026 -->
+        <section id="stats">
+            <h2>إحصائيات المسيرة التهديفية (تحديث 2026)</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="total-goals">978</h3>
+                    <p>إجمالي الأهداف الرسمية</p>
+                </div>
+                <div class="stat-card">
+                    <h3>5</h3>
+                    <p>كرات ذهبية (Ballon d'Or)</p>
+                </div>
+                <div class="stat-card">
+                    <h3>146</h3>
+                    <p>هدف دولي مع البرتغال</p>
+                </div>
+                <div class="stat-card">
+                    <h3>140</h3>
+                    <p>هدف في دوري أبطال أوروبا</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم الفيديوهات (الأجوان) -->
+        <section id="goals">
+            <h2>فيديوهات أجمل الأهداف والمهارات</h2>
+            <div class="video-grid">
+                
+                <!-- فيديو 1 -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <!-- تم استخدام روابط يوتيوب آمنة للمشاركة كمثال للأهداف التاريخية -->
+                        <iframe src="https://youtube.com" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>أجمل 40 هدفاً مجنوناً في مسيرة رونالدو</h4>
+                        <p>تجميع لأفضل التسديدات، الركلات الحرة، والأهداف الأكروباتية.</p>
+                    </div>
+                </div>
+
+                <!-- فيديو 2 -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://youtube.com" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>الهدف التاريخي "المقصية" ضد يوفنتوس</h4>
+                        <p>هدفه الأسطوري بالضربة الخلفية المزدوجة الذي صفق له جمهور الخصم.</p>
+                    </div>
+                </div>
+
+                <!-- فيديو 3 -->
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://youtube.com" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h4>أهداف رونالدو الحاسمة مع نادي النصر</h4>
+                        <p>جانب من مهاراته وأهدافه المذهلة في الدوري السعودي للمحترفين.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
     </div>
 
-    <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+    <footer>
+        <p>صفحة معجبي CR7 | تم إنشاؤها لتعمل على GitHub Pages © 2026</p>
+    </footer>
 
-        // النتيجة
-        let score1 = 0;
-        let score2 = 0;
-
-        // إعدادات اللاعبين
-        const player1 = { x: 100, y: 200, radius: 20, color: "#007bff", speed: 4 };
-        const player2 = { x: 700, y: 200, radius: 20, color: "#dc3545", speed: 4 };
-
-        // إعدادات الكرة
-        const ball = { x: 400, y: 200, radius: 12, color: "white", vx: 0, vy: 0, friction: 0.98 };
-
-        // المرمى
-        const goalWidth = 10;
-        const goalHeight = 100;
-        const goalY = (canvas.height - goalHeight) / 2;
-
-        // أزرار التحكم
-        const keys = {};
-
-        window.addEventListener("keydown", (e) => keys[e.code] = true);
-        window.addEventListener("keyup", (e) => keys[e.code] = false);
-
-        function reset() {
-            ball.x = canvas.width / 2;
-            ball.y = canvas.height / 2;
-            ball.vx = 0;
-            ball.vy = 0;
-            player1.x = 100; player1.y = 200;
-            player2.x = 700; player2.y = 200;
-        }
-
-        function checkCollision(p, b) {
-            let dx = b.x - p.x;
-            let dy = b.y - p.y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < p.radius + b.radius) {
-                let angle = Math.atan2(dy, dx);
-                let speed = 6; // قوة التسديد عند اللمس
-                b.vx = Math.cos(angle) * speed;
-                b.vy = Math.sin(angle) * speed;
-            }
-        }
-
-        function update() {
-            // حركة اللاعب 1 (W, A, S, D)
-            if (keys["KeyW"] && player1.y > player1.radius) player1.y -= player1.speed;
-            if (keys["KeyS"] && player1.y < canvas.height - player1.radius) player1.y += player1.speed;
-            if (keys["KeyA"] && player1.x > player1.radius) player1.x -= player1.speed;
-            if (keys["KeyD"] && player1.x < canvas.width - player1.radius) player1.x += player1.speed;
-
-            // حركة اللاعب 2 (الأسهم)
-            if (keys["ArrowUp"] && player2.y > player2.radius) player2.y -= player2.speed;
-            if (keys["ArrowDown"] && player2.y < canvas.height - player2.radius) player2.y += player2.speed;
-            if (keys["ArrowLeft"] && player2.x > player2.radius) player2.x -= player2.speed;
-            if (keys["ArrowRight"] && player2.x < canvas.width - player2.radius) player2.x += player2.speed;
-
-            // حركة الكرة والفيزياء
-            ball.x += ball.vx;
-            ball.y += ball.vy;
-            ball.vx *= ball.friction;
-            ball.vy *= ball.friction;
-
-            // اصطدام الكرة بالجدران
-            if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
-                ball.vy = -ball.vy;
-            }
-
-            // اصطدام الكرة باللاعبين
-            checkCollision(player1, ball);
-            checkCollision(player2, ball);
-
-            // التحقق من الأهداف
-            if (ball.x < 0) {
-                if (ball.y > goalY && ball.y < goalY + goalHeight) {
-                    score2++;
-                    document.getElementById("p2Score").innerText = score2;
-                    reset();
-                } else {
-                    ball.vx = -ball.vx;
-                }
-            }
-            if (ball.x > canvas.width) {
-                if (ball.y > goalY && ball.y < goalY + goalHeight) {
-                    score1++;
-                    document.getElementById("p1Score").innerText = score1;
-                    reset();
-                } else {
-                    ball.vx = -ball.vx;
-                }
-            }
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // خطوط الملعب
-            ctx.strokeStyle = "rgba(255,255,255,0.3)";
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.moveTo(canvas.width / 2, 0);
-            ctx.lineTo(canvas.width / 2, canvas.height);
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.arc(canvas.width / 2, canvas.height / 2, 50, 0, Math.PI * 2);
-            ctx.stroke();
-
-            // المرمى الأيسر والأيمن
-            ctx.fillStyle = "white";
-            ctx.fillRect(0, goalY, goalWidth, goalHeight);
-            ctx.fillRect(canvas.width - goalWidth, goalY, goalWidth, goalHeight);
-
-            // رسم اللاعب 1
-            ctx.fillStyle = player1.color;
-            ctx.beginPath();
-            ctx.arc(player1.x, player1.y, player1.radius, 0, Math.PI * 2);
-            ctx.fill();
-
-            // رسم اللاعب 2
-            ctx.fillStyle = player2.color;
-            ctx.beginPath();
-            ctx.arc(player2.x, player2.y, player2.radius, 0, Math.PI * 2);
-            ctx.fill();
-
-            // رسم الكرة
-            ctx.fillStyle = ball.color;
-            ctx.beginPath();
-            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
-
-        gameLoop();
-    </script>
 </body>
 </html>
