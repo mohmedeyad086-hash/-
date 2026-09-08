@@ -1,267 +1,830 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سيرة كريستيانو رونالدو الأسطورية</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Eiad Football ⚽</title>
 
-        body {
-            background-color: #0b0f19;
-            color: #f1f5f9;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+<style>
+*{box-sizing:border-box}
 
-        .container {
-            width: 100%;
-            max-width: 700px;
-            background: #1e293b;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            border: 1px solid #334155;
-        }
+body{
+  margin:0;
+  background:#101010;
+  color:white;
+  font-family:Arial,sans-serif;
+  text-align:center;
+}
 
-        /* رأس الصفحة */
-        .header {
-            background: linear-gradient(135deg, #1e3a8a, #0f172a);
-            padding: 30px;
-            text-align: center;
-            border-bottom: 3px solid #eab308;
-        }
+h1{margin:8px}
 
-        .header h1 {
-            color: #eab308;
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
+#top{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:25px;
+  font-size:24px;
+  font-weight:bold;
+  margin:8px;
+}
 
-        .header p {
-            color: #94a3b8;
-            font-size: 1rem;
-        }
+#timer{
+  background:#222;
+  padding:6px 14px;
+  border-radius:10px;
+}
 
-        /* أزرار التنقل الإعلانية */
-        .tabs {
-            display: flex;
-            background-color: #0f172a;
-            border-bottom: 1px solid #334155;
-            overflow-x: auto;
-        }
+#game{
+  position:relative;
+  width:95vw;
+  height:70vh;
+  max-width:1000px;
+  margin:auto;
+  background:#168a38;
+  border:5px solid white;
+  overflow:hidden;
+}
 
-        .tab-btn {
-            flex: 1;
-            padding: 15px 10px;
-            background: none;
-            border: none;
-            color: #94a3b8;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            white-space: nowrap;
-        }
+.line{
+  position:absolute;
+  left:50%;
+  top:0;
+  width:4px;
+  height:100%;
+  background:white;
+}
 
-        .tab-btn:hover {
-            color: #f1f5f9;
-            background-color: #1e293b;
-        }
+.circle{
+  position:absolute;
+  width:130px;
+  height:130px;
+  border:4px solid white;
+  border-radius:50%;
+  left:calc(50% - 65px);
+  top:calc(50% - 65px);
+}
 
-        .tab-btn.active {
-            color: #eab308;
-            background-color: #1e293b;
-            border-bottom: 3px solid #eab308;
-        }
+.goal{
+  position:absolute;
+  top:30%;
+  width:55px;
+  height:40%;
+  border:5px solid white;
+  background:rgba(255,255,255,.12);
+}
 
-        /* محتوى الأقسام */
-        .content-section {
-            padding: 35px;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
+.left-goal{left:-8px}
+.right-goal{right:-8px}
 
-        .content-section.active {
-            display: block;
-        }
+.player{
+  position:absolute;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:3px solid white;
+  z-index:3;
+  box-shadow:0 3px 7px #000;
+}
 
-        h2 {
-            color: #eab308;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            border-right: 4px solid #eab308;
-            padding-right: 10px;
-        }
+#p1{background:#1976ff}
+#p2{background:#ff3030}
 
-        p {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            margin-bottom: 15px;
-            text-align: justify;
-            color: #cbd5e1;
-        }
+.player::after{
+  content:"";
+  position:absolute;
+  width:12px;
+  height:12px;
+  background:#ffd2a1;
+  border-radius:50%;
+  left:50%;
+  top:-9px;
+  transform:translateX(-50%);
+  border:2px solid white;
+}
 
-        ul {
-            list-style-type: none;
-            margin-top: 15px;
-        }
+.keeper{
+  position:absolute;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:3px solid white;
+  z-index:3;
+}
 
-        li {
-            position: relative;
-            padding-right: 25px;
-            margin-bottom: 12px;
-            font-size: 1.05rem;
-            color: #e2e8f0;
-        }
+#k1{background:#00c853}
+#k2{background:#ffea00}
 
-        li::before {
-            content: "✦";
-            position: absolute;
-            right: 0;
-            color: #eab308;
-            font-weight: bold;
-        }
+#ball{
+  position:absolute;
+  width:24px;
+  height:24px;
+  background:white;
+  border:3px solid #222;
+  border-radius:50%;
+  z-index:4;
+  box-shadow:0 2px 5px #000;
+}
 
-        /* ذيل الصفحة أزرار التالي والسابق */
-        .footer-nav {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px 35px;
-            background-color: #0f172a;
-            border-top: 1px solid #334155;
-        }
+#message{
+  position:absolute;
+  inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  background:rgba(0,0,0,.78);
+  z-index:10;
+  font-size:36px;
+  font-weight:bold;
+}
 
-        .nav-btn {
-            padding: 10px 20px;
-            background-color: #1e293b;
-            color: #f1f5f9;
-            border: 1px solid #475569;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
+button{
+  margin:7px;
+  padding:10px 18px;
+  font-size:17px;
+  border:0;
+  border-radius:10px;
+  cursor:pointer;
+}
 
-        .nav-btn:hover:not(:disabled) {
-            background-color: #eab308;
-            color: #0f172a;
-            border-color: #eab308;
-        }
+#restart{
+  background:white;
+}
 
-        .nav-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+.controls{
+  font-size:15px;
+}
+</style>
 </head>
+
 <body>
 
-    <div class="container">
-        <!-- الرأس -->
-        <div class="header">
-            <h1>CRISTIANO RONALDO</h1>
-            <p>الموسوعة الكاملة لمسيرة وسيرة الدون الاحترافية</p>
-        </div>
+<h1>⚽ Eiad Football</h1>
 
-        <!-- أشرطة التنقل -->
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab(0)">النشأة</button>
-            <button class="tab-btn" onclick="switchTab(1)">الأندية الأوروبية</button>
-            <button class="tab-btn" onclick="switchTab(2)">العالمية والنصر</button>
-            <button class="tab-btn" onclick="switchTab(3)">الأرقام القياسية</button>
-        </div>
+<div id="top">
+  <span>🔵 <b id="s1">0</b></span>
+  <span id="timer">02:00</span>
+  <span><b id="s2">0</b> 🔴</span>
+</div>
 
-        <!-- الأقسام -->
-        <!-- القسم 1 -->
-        <div class="content-section active">
-            <h2>المولد والطفولة القاسية</h2>
-            <p>ولد كريستيانو رونالدو دوس سانتوس أفيرو في 5 فبراير 1985 في جزيرة ماديرا البرتغالية، ونشأ في عائلة فقيرة جداً كأصغر ابن بين إخوته.</p>
-            <p>اكتشف شغفه بكرة القدم منذ طفولته المبكرة وكان يلعب في شوارع الجزيرة. انضم لاحقاً لأكاديمية سبورتينغ لشبونة، حيث واجه صعوبات بالغة بسبب بعده عن عائلته، وتخطى أزمة صحية في قلبه بسن الـ15 عبر جراحة دقيقة كادت تنهي مسيرته قبل أن تبدأ.</p>
-        </div>
+<div id="game">
 
-        <!-- القسم 2 -->
-        <div class="content-section">
-            <h2>الحقبة الأوروبية التاريخية</h2>
-            <p>انطلق للعالمية عام 2003 بعد انضمامه إلى مانشستر يونايتد الإنجليزي تحت قيادة السير أليكس فيرغسون، وحقق معهم أول دوري أبطال أوروبا والكرة الذهبية الأولى له.</p>
-            <p>في عام 2009، انتقل إلى ريال مدريد الإسباني بصفقة تاريخية، ليصبح الهداف التاريخي للنادي بـ 450 هدفاً متوجاً بأربعة ألقاب دوري أبطال أوروبا. خاض بعدها تجربة ملهمة مع يوفنتوس الإيطالي محققاً كافة الألقاب المحلية هناك.</p>
-        </div>
+  <div class="line"></div>
+  <div class="circle"></div>
 
-        <!-- القسم 3 -->
-        <div class="content-section">
-            <h2>التجربة الدولية والنصر السعودي</h2>
-            <p>قاد منتخب البرتغال للتتويج التاريخي بكأس أمم أوروبا (يورو 2016) ودوري الأمم الأوروبية 2019، وأصبح الهداف التاريخي لكرة القدم الدولية على مستوى المنتخبات.</p>
-            <p>في أواخر عام 2022، دشن خطوة استثنائية بانتقاله إلى نادي النصر السعودي، مما أحدث ثورة شاملة وجذب كبار نجوم كرة القدم العالمية إلى دوري روشن السعودي.</p>
-        </div>
+  <div class="goal left-goal"></div>
+  <div class="goal right-goal"></div>
 
-        <!-- القسم 4 -->
-        <div class="content-section">
-            <h2>أبرز الإنجازات والأرقام القياسية</h2>
-            <p>تضم الخزينة الأسطورية لـ CR7 إحصائيات لم تسبق في تاريخ كرة القدم:</p>
-            <ul>
-                <li>الفوز بـ 5 كرات ذهبية (Ballon d'Or).</li>
-                <li>الهداف التاريخي الرسمي لكرة القدم متجاوزاً حاجز الـ 900 هدف.</li>
-                <li>الهداف التاريخي لدوري أبطال أوروبا والبطولات الأوروبية للمنتخبات.</li>
-                <li>الحذاء الذهبي الأوروبي 4 مرات.</li>
-            </ul>
-        </div>
+  <div id="p1" class="player"></div>
+  <div id="p2" class="player"></div>
 
-        <!-- أزرار الأسفل -->
-        <div class="footer-nav">
-            <button class="nav-btn" id="prevBtn" onclick="changeSection(-1)" disabled>السابق</button>
-            <button class="nav-btn" id="nextBtn" onclick="changeSection(1)">التالي</button>
-        </div>
-    </div>
+  <div id="k1" class="keeper"></div>
+  <div id="k2" class="keeper"></div>
 
-    <script>
-        let currentIdx = 0;
-        const sections = document.querySelectorAll('.content-section');
-        const tabs = document.querySelectorAll('.tab-btn');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+  <div id="ball"></div>
 
-        function updateUI() {
-            sections.forEach((sec, idx) => {
-                if(idx === currentIdx) {
-                    sec.classList.add('active');
-                    tabs[idx].classList.add('active');
-                } else {
-                    sec.classList.remove('active');
-                    tabs[idx].classList.remove('active');
-                }
-            });
+  <div id="message"></div>
 
-            // تحديث حالة الأزرار
-            prevBtn.disabled = (currentIdx === 0);
-            nextBtn.disabled = (currentIdx === sections.length - 1);
-        }
+</div>
 
-        function switchTab(index) {
-            currentIdx = index;
-            updateUI();
-        }
+<button id="restart">🔄 مباراة جديدة</button>
 
-        function changeSection(direction) {
-            currentIdx += direction;
-            if(currentIdx < 0) currentIdx = 0;
-            if(currentIdx >= sections.length) currentIdx = sections.length - 1;
-            updateUI();
-        }
-    </script>
+<div class="controls">
+  🔵 W A S D للحركة | Space تسديدة | Shift Sprint
+  <br>
+  🔴 الأسهم للحركة | Enter تسديدة | Shift + الأسهم Sprint
+</div>
+
+<script>
+
+const game=document.getElementById("game");
+
+const p1=document.getElementById("p1");
+const p2=document.getElementById("p2");
+
+const k1=document.getElementById("k1");
+const k2=document.getElementById("k2");
+
+const ball=document.getElementById("ball");
+
+const s1=document.getElementById("s1");
+const s2=document.getElementById("s2");
+
+const timer=document.getElementById("timer");
+const message=document.getElementById("message");
+const restart=document.getElementById("restart");
+
+const keys={};
+
+let score1=0;
+let score2=0;
+
+let timeLeft=120;
+let gameOver=false;
+
+let player1={
+  x:150,
+  y:250
+};
+
+let player2={
+  x:750,
+  y:250
+};
+
+let keeper1={
+  x:30,
+  y:200
+};
+
+let keeper2={
+  x:750,
+  y:200
+};
+
+let ballData={
+  x:488,
+  y:250,
+  vx:0,
+  vy:0
+};
+
+document.addEventListener("keydown",e=>{
+  keys[e.key.toLowerCase()]=true;
+
+  if(e.code==="Space"){
+    keys["space"]=true;
+  }
+});
+
+document.addEventListener("keyup",e=>{
+  keys[e.key.toLowerCase()]=false;
+
+  if(e.code==="Space"){
+    keys["space"]=false;
+  }
+});
+
+function distance(a,b){
+  return Math.hypot(
+    a.x-b.x,
+    a.y-b.y
+  );
+}
+
+/* ركلة عادية */
+function kick(player){
+
+  if(distance(player,ballData)<65){
+
+    let dx=ballData.x-player.x;
+    let dy=ballData.y-player.y;
+
+    let len=Math.hypot(dx,dy)||1;
+
+    ballData.vx=(dx/len)*10;
+    ballData.vy=(dy/len)*10;
+  }
+}
+
+/* تسديدة قوية */
+function powerKick(player){
+
+  if(distance(player,ballData)<70){
+
+    let dx=ballData.x-player.x;
+    let dy=ballData.y-player.y;
+
+    let len=Math.hypot(dx,dy)||1;
+
+    ballData.vx=(dx/len)*18;
+    ballData.vy=(dy/len)*18;
+  }
+}
+
+/* حركة اللاعب الأول */
+function movePlayer1(){
+
+  let speed=keys["shift"]?8:5;
+
+  if(keys["w"])player1.y-=speed;
+  if(keys["s"])player1.y+=speed;
+  if(keys["a"])player1.x-=speed;
+  if(keys["d"])player1.x+=speed;
+
+  if(keys["space"]){
+    powerKick(player1);
+  }
+}
+
+/* حركة اللاعب الثاني */
+function movePlayer2(){
+
+  let speed=keys["shift"]?8:5;
+
+  if(keys["arrowup"])player2.y-=speed;
+  if(keys["arrowdown"])player2.y+=speed;
+  if(keys["arrowleft"])player2.x-=speed;
+  if(keys["arrowright"])player2.x+=speed;
+
+  if(keys["enter"]){
+    powerKick(player2);
+  }
+}
+
+function limitPlayer(p){
+
+  p.x=Math.max(
+    0,
+    Math.min(game.clientWidth-44,p.x)
+  );
+
+  p.y=Math.max(
+    0,
+    Math.min(game.clientHeight-44,p.y)
+  );
+}
+
+/* الحراس يتحركون ناحية الكرة */
+function moveKeepers(){
+
+  let targetY=ballData.y-20;
+
+  keeper1.y +=
+    (targetY-keeper1.y)*0.04;
+
+  keeper2.y +=
+    (targetY-keeper2.y)*0.04;
+
+  keeper1.y=Math.max(
+    game.clientHeight*.30,
+    Math.min(game.clientHeight*.70-40,keeper1.y)
+  );
+
+  keeper2.y=Math.max(
+    game.clientHeight*.30,
+    Math.min(game.clientHeight*.70-40,keeper2.y)
+  );
+}
+
+/* اصطدام الحارس */
+function keeperCollision(k){
+
+  if(distance(k,ballData)<43){
+
+    ballData.vx*=-1.2;
+
+    ballData.vy*=0.9;
+
+    if(Math.abs(ballData.vx)<5){
+      ballData.vx=
+        ballData.vx<0?-7:7;
+    }
+  }
+}
+
+function moveBall(){
+
+  ballData.x+=ballData.vx;
+  ballData.y+=ballData.vy;
+
+  ballData.vx*=0.985;
+  ballData.vy*=0.985;
+
+  if(
+    ballData.y<=0 ||
+    ballData.y>=game.clientHeight-24
+  ){
+    ballData.vy*=-0.85;
+  }
+
+  keeperCollision(keeper1);
+  keeperCollision(keeper2);
+
+  /* الهدف الأيسر */
+  if(ballData.x<=0){
+
+    if(
+      ballData.y>game.clientHeight*.30 &&
+      ballData.y<game.clientHeight*.70
+    ){
+
+      score2++;
+      resetBall();
+
+    }else{
+
+      ballData.x=0;
+      ballData.vx=Math.abs(ballData.vx);
+    }
+  }
+
+  /* الهدف الأيمن */
+  if(ballData.x>=game.clientWidth-24){
+
+    if(
+      ballData.y>game.clientHeight*.30 &&
+      ballData.y<game.clientHeight*.70
+    ){
+
+      score1++;
+      resetBall();
+
+    }else{
+
+      ballData.x=game.clientWidth-24;
+      ballData.vx=-Math.abs(ballData.vx);
+    }
+  }
+}
+
+function resetBall(){
+
+  ballData.x=
+    game.clientWidth/2-12;
+
+  ballData.y=
+    game.clientHeight/2-12;
+
+  ballData.vx=0;
+  ballData.vy=0;
+
+  player1.x=150;
+  player1.y=250;
+
+  player2.x=750;
+  player2.y=250;
+}
+
+function updateScore(){
+
+  s1.textContent=score1;
+  s2.textContent=score2;
+}
+
+function updateTimer(){
+
+  let min=Math.floor(timeLeft/60);
+  let sec=timeLeft%60;
+
+  timer.textContent=
+    String(min).padStart(2,"0")
+    +":"+
+    String(sec).padStart(2,"0");
+}
+
+setInterval(()=>{
+
+  if(gameOver)return;
+
+  timeLeft--;
+
+  updateTimer();
+
+  if(timeLeft<=0){
+
+    gameOver=true;
+
+    if(score1>score2){
+      message.textContent="🏆 الأزرق فاز!";
+    }
+    else if(score2>score1){
+      message.textContent="🏆 الأحمر فاز!";
+    }
+    else{
+      message.textContent="🤝 تعادل!";
+    }
+
+    message.style.display="flex";
+  }
+
+},1000);
+
+function draw(){
+
+  p1.style.left=player1.x+"px";
+  p1.style.top=player1.y+"px";
+
+  p2.style.left=player2.x+"px";
+  p2.style.top=player2.y+"px";
+
+  k1.style.left=keeper1.x+"px";
+  k1.style.top=keeper1.y+"px";
+
+  k2.style.left=keeper2.x+"px";
+  k2.style.top=keeper2.y+"px";
+
+  ball.style.left=ballData.x+"px";
+  ball.style.top=ballData.y+"px";
+
+  updateScore();
+}
+
+function gameLoop(){
+
+  if(!gameOver){
+
+    movePlayer1();
+    movePlayer2();
+
+    limitPlayer(player1);
+    limitPlayer(player2);
+
+    moveKeepers();
+    moveBall();
+    draw();
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+restart.onclick=()=>{
+
+  score1=0;
+  score2=0;
+
+  timeLeft=120;
+  gameOver=false;
+
+  message.style.display="none";
+
+  resetBall();
+  updateScore();
+  updateTimer();
+};
+
+updateTimer();
+gameLoop();
+
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Eiad Football Online ⚽</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#101010;
+  color:white;
+  font-family:Arial,sans-serif;
+  text-align:center;
+}
+
+.container{
+  width:90%;
+  max-width:500px;
+  margin:80px auto;
+  background:#1d1d1d;
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 0 25px rgba(0,0,0,.6);
+}
+
+h1{
+  font-size:35px;
+}
+
+input{
+  width:90%;
+  padding:15px;
+  margin:10px;
+  border-radius:10px;
+  border:0;
+  font-size:18px;
+  text-align:center;
+}
+
+button{
+  width:90%;
+  padding:15px;
+  margin:10px;
+  border:0;
+  border-radius:12px;
+  font-size:19px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#create{
+  background:#1976ff;
+  color:white;
+}
+
+#join{
+  background:#00c853;
+  color:white;
+}
+
+#status{
+  margin-top:20px;
+  font-size:18px;
+  min-height:25px;
+}
+
+#room{
+  display:none;
+}
+
+.code{
+  font-size:35px;
+  letter-spacing:8px;
+  margin:20px;
+  color:#00e5ff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>⚽ Eiad Football</h1>
+
+  <div id="menu">
+
+    <input
+      id="playerName"
+      placeholder="اكتب اسمك"
+      maxlength="15"
+    >
+
+    <button id="create">
+      🎮 إنشاء غرفة
+    </button>
+
+    <button id="join">
+      👥 دخول غرفة
+    </button>
+
+    <input
+      id="roomCode"
+      placeholder="كود الغرفة"
+      maxlength="6"
+      style="display:none"
+    >
+
+    <div id="status"></div>
+
+  </div>
+
+  <div id="room">
+
+    <h2>🎮 الغرفة جاهزة!</h2>
+
+    <p>ابعت الكود للاعب الثاني:</p>
+
+    <div class="code" id="roomNumber"></div>
+
+    <p id="players">
+      👤 أنت فقط داخل الغرفة
+    </p>
+
+  </div>
+
+</div>
+
+<script>
+
+const createButton=
+document.getElementById("create");
+
+const joinButton=
+document.getElementById("join");
+
+const nameInput=
+document.getElementById("playerName");
+
+const roomInput=
+document.getElementById("roomCode");
+
+const status=
+document.getElementById("status");
+
+const menu=
+document.getElementById("menu");
+
+const room=
+document.getElementById("room");
+
+const roomNumber=
+document.getElementById("roomNumber");
+
+function createRoomCode(){
+
+  const chars=
+  "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+  let code="";
+
+  for(let i=0;i<6;i++){
+
+    code+=chars[
+      Math.floor(
+        Math.random()*chars.length
+      )
+    ];
+
+  }
+
+  return code;
+}
+
+createButton.onclick=()=>{
+
+  const name=
+    nameInput.value.trim();
+
+  if(!name){
+
+    status.textContent=
+      "⚠️ اكتب اسمك الأول";
+
+    return;
+  }
+
+  const code=
+    createRoomCode();
+
+  roomNumber.textContent=code;
+
+  menu.style.display="none";
+  room.style.display="block";
+
+};
+
+joinButton.onclick=()=>{
+
+  if(
+    roomInput.style.display==="none"
+  ){
+
+    roomInput.style.display="block";
+
+    status.textContent=
+      "اكتب كود الغرفة ثم اضغط دخول مرة أخرى";
+
+    return;
+  }
+
+  const code=
+    roomInput.value
+      .trim()
+      .toUpperCase();
+
+  if(code.length!==6){
+
+    status.textContent=
+      "⚠️ كود الغرفة لازم يكون 6 أحرف";
+
+    return;
+  }
+
+  status.textContent=
+    "🔄 جاري الاتصال بالغرفة...";
+
+};
+
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eiad Football Online ⚽</title>
+</head>
+
+<body>
+
+  <h1>🔥 Eiad Football Online ⚽</h1>
+
+  <p>المرحلة 6: الاتصال بين جهازين 🌐</p>
+
+  <button id="connectBtn">اتصال باللعبة</button>
+
+  <p id="status">غير متصل ❌</p>
+
+  <script>
+    document.getElementById("connectBtn").onclick = function () {
+      document.getElementById("status").textContent =
+        "جاهز للاتصال 🌐⚽";
+    };
+  </script>
+
 </body>
 </html>
